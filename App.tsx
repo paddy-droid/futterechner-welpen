@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
 // --- KONSTANTEN & DATEN ---
@@ -482,20 +482,27 @@ const App = () => {
         <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Wie fütterst Du?</h2>
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">Wähle eine Option, um ein wissenschaftlich fundiertes Feedback zu erhalten.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 <div onClick={() => setView('calculator')} className="bg-white p-8 rounded-2xl shadow-2xl border-2 border-transparent hover:border-amber-500 cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
                     <div className="text-amber-500 mx-auto mb-4 h-16 w-16 flex items-center justify-center bg-amber-100 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Selbstkochen für Welpen</h3>
-                    <p className="text-gray-600">Berechne den individuellen Bedarf und erhalte einen kompletten Futterplan für Deinen Welpen.</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Selbstkochen für Welpen</h3>
+                    <p className="text-sm text-gray-600">Berechne den individuellen Bedarf und erhalte einen kompletten Futterplan.</p>
                 </div>
                 <div onClick={() => setView('analyzer')} className="bg-white p-8 rounded-2xl shadow-2xl border-2 border-transparent hover:border-amber-500 cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
                     <div className="text-amber-500 mx-auto mb-4 h-16 w-16 flex items-center justify-center bg-amber-100 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Futter-Analyse (Nass & Trocken)</h3>
-                    <p className="text-gray-600">Lass das Futter Deines Hundes analysieren – per Name oder Foto der Inhaltsstoffe.</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Futter-Analyse</h3>
+                    <p className="text-sm text-gray-600">Lass das Futter Deines Hundes analysieren – per Name oder Foto.</p>
+                </div>
+                <div onClick={() => setView('kackiAnalyzer')} className="bg-white p-8 rounded-2xl shadow-2xl border-2 border-transparent hover:border-amber-500 cursor-pointer transition-all duration-300 transform hover:-translate-y-2">
+                    <div className="text-amber-500 mx-auto mb-4 h-16 w-16 flex items-center justify-center bg-amber-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Kacki Analyser</h3>
+                    <p className="text-sm text-gray-600">Deep-Vision Analyse für Kot: Gesundheit, Verdauung & Warnsignale.</p>
                 </div>
             </div>
         </div>
@@ -1181,6 +1188,302 @@ ${basePrompt}
         )
     };
 
+    const KackiAnalyzerView = () => {
+        const [poopImage, setPoopImage] = useState(null);
+        const [imagePreview, setImagePreview] = useState(null);
+        const [analysisResult, setAnalysisResult] = useState(null);
+        const [isLoading, setIsLoading] = useState(false);
+        const [loadingText, setLoadingText] = useState('Starte Analyse...');
+        const [error, setError] = useState('');
+        const fileInputRef = useRef(null);
+        const cameraInputRef = useRef(null);
+
+        const loadingTexts = [
+            "Analysiere Textur...",
+            "Prüfe auf Auffälligkeiten...",
+            "Vergleiche mit Bristol-Skala...",
+            "Untersuche Farbgebung...",
+            "Generiere tierärztliche Einschätzung..."
+        ];
+
+        useEffect(() => {
+            let interval;
+            if (isLoading) {
+                let i = 0;
+                interval = setInterval(() => {
+                    setLoadingText(loadingTexts[i % loadingTexts.length]);
+                    i++;
+                }, 800);
+            }
+            return () => clearInterval(interval);
+        }, [isLoading]);
+
+        const handleImageChange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                setPoopImage(file);
+                setImagePreview(URL.createObjectURL(file));
+                setError('');
+                setAnalysisResult(null);
+            }
+        };
+
+        const handleAnalyze = async () => {
+            if (!poopImage) {
+                setError('Bitte lade ein Bild hoch.');
+                return;
+            }
+            setError('');
+            setIsLoading(true);
+            setAnalysisResult(null);
+
+            try {
+                const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+                const base64Image = await fileToBase64(poopImage);
+
+                const systemPrompt = `
+Du bist Dr. Vet (Willenskraft AI), spezialisiert auf gastroenterologische Gesundheit bei Hunden.
+Deine Aufgabe: Eine tiefgehende visuelle Analyse des hochgeladenen Kot-Bildes.
+
+ANALYSE-TIEFE (Vision):
+Schau genau hin. Bewerte nicht nur die Form (Bristol Scale), sondern auch:
+- Farbe (z.B. Gelblich = evtl. zu schnelle Passage/Unverträglichkeit; Schwarz = Sofort Tierarzt; Blutig = Sofort Tierarzt).
+- Textur & Oberfläche (Schleimig? Trocken/Bröselig? Fettig glänzend?).
+- Fremdkörper (Würmer? Unverdaute Futterreste?).
+
+OUTPUT-REGELN (Tonalität & Inhalt):
+1.  **Sprache:** Direkt, "Du"-Form, verständlich, aber fachlich fundiert (Willenskraft-Style). Keine Alarmpanik, sondern klare Führung.
+2.  **Holistische Erklärung:** Erkläre dem Nutzer *warum* der Kot so aussieht.
+3.  **Detaillierte Hilfestellung (Der wichtigste Teil):**
+    Für jede erkannte Auffälligkeit (z.B. Schleim, weiche Konsistenz, Farbe) musst du eine strukturierte Erklärung liefern:
+    - **Woher kommt es?** (Ursache, z.B. "Dünndarmreizung", "Futterumstellung")
+    - **Was macht es?** (Auswirkung, z.B. "Nährstoffe werden nicht absorbiert", "Flüssigkeitsverlust")
+    - **Was tun?** (Konkrete Maßnahme, z.B. "Schonkost für 2 Tage", "Tierarzt aufsuchen")
+4.  **Lösung (Interne Verlinkung):**
+    - Bei leichten Problemen: Verweise auf den **"Futter-Rechner"** (Schonkost).
+    - Bei schweren Problemen: **Tierarzt**.
+
+FORMAT (JSON):
+Gib die Antwort strikt als JSON zurück:
+{
+  "bristol_score": number, // 1-7
+  "analysis_depth": string, // Zusammenfassende Erklärung
+  "detailed_findings": [ // Liste der spezifischen Auffälligkeiten mit Details
+    {
+      "observation": string, // z.B. "Gelbliche Verfärbung"
+      "cause": string, // z.B. "Zu schnelle Darmpassage..."
+      "consequence": string, // z.B. "Nährstoffe werden nicht..."
+      "advice": string // z.B. "Leicht verdauliche Kost füttern..."
+    }
+  ],
+  "visual_details": string[], // Kurze Schlagworte für Tags
+  "status_color": "green" | "yellow" | "red",
+  "recommendation_text": string,
+  "cta_action": "open_calculator" | "call_vet" | "none"
+}
+`;
+
+                const response = await ai.models.generateContent({
+                    model: 'models/gemini-2.0-flash-exp',
+                    contents: {
+                        parts: [
+                            { text: systemPrompt },
+                            { inlineData: { mimeType: poopImage.type, data: base64Image as string } }
+                        ]
+                    },
+                    config: { responseMimeType: "application/json" }
+                });
+
+                const result = JSON.parse(response.text);
+                setAnalysisResult(result);
+
+            } catch (e) {
+                console.error(e);
+                setError('Die Analyse konnte nicht durchgeführt werden. Bitte versuche es erneut.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        return (
+            <>
+                <BackButton onBack={() => setView('selection')} />
+                <div className="bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center p-3 bg-amber-100 rounded-full mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h2 className="text-3xl font-bold text-gray-900">Kacki Analyser</h2>
+                        <p className="text-gray-600 mt-2">Medizinische Deep-Vision Analyse für maximale Sicherheit.</p>
+                    </div>
+
+                    {!analysisResult && (
+                        <div className="space-y-6 max-w-xl mx-auto">
+                            <div className="mt-1 flex justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 min-h-[200px]">
+                                {imagePreview ? (
+                                    <img src={imagePreview} alt="Vorschau" className="max-h-64 object-contain rounded-lg shadow-md" />
+                                ) : (
+                                    <div className="space-y-2 text-center">
+                                        <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <p className="text-sm text-gray-600">Foto vom "Häufchen" machen</p>
+                                        <p className="text-xs text-gray-500">Wir analysieren Farbe, Textur & Konsistenz</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => cameraInputRef.current?.click()}
+                                    className="inline-flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    Kamera
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="inline-flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                    Galerie
+                                </button>
+                            </div>
+                            <input ref={fileInputRef} type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
+                            <input ref={cameraInputRef} type="file" className="sr-only" accept="image/*" capture="environment" onChange={handleImageChange} />
+
+                            <button
+                                onClick={handleAnalyze}
+                                disabled={isLoading || !poopImage}
+                                className="w-full flex justify-center py-4 px-4 border border-transparent rounded-lg shadow-sm text-md font-medium text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
+                            >
+                                {isLoading ? 'Starte Deep Scan...' : 'Jetzt analysieren'}
+                            </button>
+                            {error && <p className="text-red-600 text-center text-sm">{error}</p>}
+                        </div>
+                    )}
+
+                    {isLoading && (
+                        <div className="mt-10 text-center">
+                            <div className="inline-block relative w-20 h-20">
+                                <div className="absolute top-0 left-0 w-full h-full border-4 border-amber-200 rounded-full animate-ping"></div>
+                                <div className="absolute top-0 left-0 w-full h-full border-4 border-amber-500 rounded-full animate-spin border-t-transparent"></div>
+                            </div>
+                            <p className="mt-6 text-lg font-semibold text-gray-700 animate-pulse">{loadingText}</p>
+                        </div>
+                    )}
+
+                    {analysisResult && (
+                        <div className="mt-8 animate-fade-in-up">
+                            {/* Image Display in Result */}
+                            {imagePreview && (
+                                <div className="mb-8 flex justify-center">
+                                    <div className="relative">
+                                        <img
+                                            src={imagePreview}
+                                            alt="Analyse-Bild"
+                                            className="h-48 w-48 object-cover rounded-xl shadow-lg border-4 border-white"
+                                        />
+                                        <div className={`absolute -bottom-3 -right-3 px-4 py-1 rounded-full text-sm font-bold shadow-md ${analysisResult.status_color === 'red' ? 'bg-red-500 text-white' :
+                                                analysisResult.status_color === 'yellow' ? 'bg-yellow-500 text-white' :
+                                                    'bg-green-500 text-white'
+                                            }`}>
+                                            Bristol {analysisResult.bristol_score}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className={`p-6 rounded-xl border-l-8 shadow-lg ${analysisResult.status_color === 'red' ? 'bg-red-50 border-red-500' :
+                                    analysisResult.status_color === 'yellow' ? 'bg-yellow-50 border-yellow-500' :
+                                        'bg-green-50 border-green-500'
+                                }`}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <h3 className="text-2xl font-bold text-gray-900">Analyse-Ergebnis</h3>
+                                </div>
+
+                                <p className="text-lg text-gray-800 leading-relaxed mb-6 font-medium">
+                                    {analysisResult.analysis_depth}
+                                </p>
+
+                                {/* Detailed Findings Section */}
+                                {analysisResult.detailed_findings && analysisResult.detailed_findings.length > 0 && (
+                                    <div className="mb-8 space-y-4">
+                                        <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Detail-Diagnose & Hilfe</h4>
+                                        {analysisResult.detailed_findings.map((finding, idx) => (
+                                            <div key={idx} className="bg-white bg-opacity-60 rounded-lg p-4 border border-gray-200">
+                                                <h5 className="font-bold text-gray-900 mb-2 flex items-center">
+                                                    <span className={`w-2 h-2 rounded-full mr-2 ${analysisResult.status_color === 'red' ? 'bg-red-500' : 'bg-amber-500'
+                                                        }`}></span>
+                                                    {finding.observation}
+                                                </h5>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                                    <div>
+                                                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Woher kommt's?</span>
+                                                        <p className="text-gray-700">{finding.cause}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Was macht's?</span>
+                                                        <p className="text-gray-700">{finding.consequence}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Was tun?</span>
+                                                        <p className="text-amber-700 font-bold">{finding.advice}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className="mb-6">
+                                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Erkannte Merkmale</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {analysisResult.visual_details.map((detail, idx) => (
+                                            <span key={idx} className="bg-white px-3 py-1 rounded-md border border-gray-200 text-sm text-gray-700 shadow-sm">
+                                                {detail}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-inner">
+                                    <h4 className="text-sm font-bold text-amber-600 uppercase tracking-wider mb-2 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
+                                        Empfehlung
+                                    </h4>
+                                    <p className="text-gray-700 mb-4">{analysisResult.recommendation_text}</p>
+
+                                    {analysisResult.cta_action === 'open_calculator' && (
+                                        <button
+                                            onClick={() => setView('calculator')}
+                                            className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold shadow-md transition transform hover:scale-105"
+                                        >
+                                            Jetzt Schonkost berechnen
+                                        </button>
+                                    )}
+
+                                    {analysisResult.cta_action === 'call_vet' && (
+                                        <a
+                                            href="https://www.google.com/search?q=Tierarzt+Notdienst+in+meiner+Nähe"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full text-center py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold shadow-md transition transform hover:scale-105"
+                                        >
+                                            Tierarzt-Notdienst suchen
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </>
+        );
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
             <div className="relative z-10">
@@ -1196,6 +1499,7 @@ ${basePrompt}
                     {view === 'selection' && <SelectionView />}
                     {view === 'calculator' && <CalculatorView />}
                     {view === 'analyzer' && <AnalyzerView />}
+                    {view === 'kackiAnalyzer' && <KackiAnalyzerView />}
                 </main>
             </div>
         </div>

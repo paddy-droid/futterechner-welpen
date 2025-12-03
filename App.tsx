@@ -567,7 +567,7 @@ Gib das Ergebnis als valides JSON zurück.
 WICHTIG: BAUKASTEN-SYSTEM (STRIKT NACH STUDIE):
 Die Ration MUSS exakt wie folgt aufgebaut sein (Gramm-Basis):
 - **50-60% Proteinquelle** (Muskelfleisch/Fisch)
-- **5-10% Innereien** (Leber/Herz)
+- **5-10% Innereien** (WICHTIG: Variiere! Nicht nur Leber, sondern auch Hühnermägen, Lunge, Herz, Niere etc. Leber darf nicht die einzige Innerei sein!)
 - **15-30% Kohlenhydratquelle** (Kartoffeln/Reis/Hirse)
 - **10-20% Faser-/Gemüse-Quelle**
 - **1-3% Fettquelle** (Öle)
@@ -637,6 +637,7 @@ BASIS-WERTE:
 
 AUFGABE:
 Erstelle 7 unterschiedliche Rezept-Konzepte. Rotiere die Kohlenhydratquellen (Reis, Kartoffel, Hirse, etc.) und Proteinquellen.
+Plane auch die Innereien-Quelle für jeden Tag, um Abwechslung zu garantieren (z.B. Hühnermägen, Rinderlunge, Putenherz, Leber - aber nicht jeden Tag Leber!).
 Gib NUR das JSON-Gerüst zurück.
 
 JSON-Format:
@@ -645,6 +646,7 @@ JSON-Format:
     "day": 1,
     "title": "Kreativer Name",
     "main_protein": "z.B. Rindfleisch",
+    "offal_source": "z.B. Hühnerherzen",
     "carb_source": "z.B. Kartoffeln",
     "veggies": "z.B. Karotten, Zucchini"
   },
@@ -686,7 +688,7 @@ STRIKTE VORGABEN (MATHEMATISCH):
     **ACHTUNG: Der Fleischanteil war zuletzt zu hoch. Halte dich strikt an diese Obergrenzen:**
     
     - **45-50%** Muskelfleisch (Nicht mehr!)
-    - **5-10%** Innereien
+    - **5-10%** Innereien (WICHTIG: Nutze die geplante Innerei. Variiere! Nicht nur Leber, sondern auch Herz, Mägen, Lunge. Leber sollte nicht dominieren.)
     - **25-30%** Kohlenhydrate (gekocht) - *Erhöhe diesen Anteil leicht, um Fleisch zu reduzieren.*
     - **15-20%** Gemüse/Obst
     - **1-3%** Öl

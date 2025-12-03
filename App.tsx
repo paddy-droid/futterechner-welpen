@@ -566,10 +566,10 @@ Gib das Ergebnis als valides JSON zurück.
 
 WICHTIG: BAUKASTEN-SYSTEM (STRIKT NACH STUDIE):
 Die Ration MUSS exakt wie folgt aufgebaut sein (Gramm-Basis):
-- **50-60% Proteinquelle** (Muskelfleisch/Fisch)
-- **5-10% Innereien** (WICHTIG: Variiere! Nicht nur Leber, sondern auch Hühnermägen, Lunge, Herz, Niere etc. Leber darf nicht die einzige Innerei sein!)
-- **15-30% Kohlenhydratquelle** (Kartoffeln/Reis/Hirse)
-- **10-20% Faser-/Gemüse-Quelle**
+- **50-60% Proteinquelle** (Muskelfleisch/Fisch - GEKOCHT oder GEBRATEN)
+- **5-10% Innereien** (WICHTIG: Variiere! Nicht nur Leber, sondern auch Hühnermägen, Lunge, Herz, Niere etc. Leber darf nicht die einzige Innerei sein! Alles GEKOCHT.)
+- **15-30% Kohlenhydratquelle** (Kartoffeln/Reis/Hirse - GEKOCHT)
+- **10-20% Faser-/Gemüse-Quelle** (GEKOCHT/PÜRIERT)
 - **1-3% Fettquelle** (Öle)
 
 WICHTIG ZUR SUPPLEMENTIERUNG & ÖLEN:
@@ -637,6 +637,7 @@ BASIS-WERTE:
 
 AUFGABE:
 Erstelle 7 unterschiedliche Rezept-Konzepte. Rotiere die Kohlenhydratquellen (Reis, Kartoffel, Hirse, etc.) und Proteinquellen.
+WICHTIG: Plane NUR gekochte oder gebratene Komponenten. Kein rohes Fleisch oder Gemüse.
 Plane auch die Innereien-Quelle für jeden Tag, um Abwechslung zu garantieren (z.B. Hühnermägen, Rinderlunge, Putenherz, Leber - aber nicht jeden Tag Leber!).
 Gib NUR das JSON-Gerüst zurück.
 
@@ -687,10 +688,10 @@ STRIKTE VORGABEN (MATHEMATISCH):
     Die Gesamtfuttermenge muss sich zwingend an diese Verteilung halten (Gramm-Basis).
     **ACHTUNG: Der Fleischanteil war zuletzt zu hoch. Halte dich strikt an diese Obergrenzen:**
     
-    - **45-50%** Muskelfleisch (Nicht mehr!)
-    - **5-10%** Innereien (WICHTIG: Nutze die geplante Innerei. Variiere! Nicht nur Leber, sondern auch Herz, Mägen, Lunge. Leber sollte nicht dominieren.)
+    - **45-50%** Muskelfleisch (GEKOCHT oder GEBRATEN - Nicht mehr!)
+    - **5-10%** Innereien (WICHTIG: Nutze die geplante Innerei. Variiere! Nicht nur Leber, sondern auch Herz, Mägen, Lunge. Leber sollte nicht dominieren. Alles GEKOCHT.)
     - **25-30%** Kohlenhydrate (gekocht) - *Erhöhe diesen Anteil leicht, um Fleisch zu reduzieren.*
-    - **15-20%** Gemüse/Obst
+    - **15-20%** Gemüse/Obst (GEKOCHT/PÜRIERT)
     - **1-3%** Öl
 
     *Beispiel-Rechnung:* Bei 500g Gesamtfutter -> Fleisch MAXIMAL 250g, Innereien ca. 30-50g. Der Rest MUSS Beilage sein.

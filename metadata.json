@@ -1,0 +1,7 @@
+{
+  "name": "Willenskraft | Futter-Rechner für selbstgekochtes Welpenfutter",
+  "description": "Ein Rechner zur Erstellung von ganzheitlichen, bedarfsgerechten und wissenschaftlich fundierten Futterplänen für selbstgekochtes Welpenfutter, im Stil der Willenskraft Hundeschule.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

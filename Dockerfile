@@ -1,12 +1,12 @@
 # Stage 1: Build the frontend, and install server dependencies
-FROM node:22 AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Copy all files from the current directory
 COPY . ./
-RUN echo "API_KEY=PLACEHOLDER" > ./.env
-RUN echo "GEMINI_API_KEY=PLACEHOLDER" >> ./.env
+RUN echo "GEMINI_API_KEY=PLACEHOLDER" > ./.env
+RUN echo "VITE_GEMINI_API_KEY=PLACEHOLDER" >> ./.env
 
 # Install server dependencies
 WORKDIR /app/server
@@ -19,7 +19,7 @@ RUN bash -c 'if [ -f package.json ]; then npm install && npm run build; fi'
 
 
 # Stage 2: Build the final server image
-FROM node:22
+FROM node:20-alpine
 
 WORKDIR /app
 

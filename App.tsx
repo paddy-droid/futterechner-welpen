@@ -397,7 +397,7 @@ const AiLoader = ({ text }) => (
     </div>
 );
 
-const RecipeCard = ({ recipe, day }) => (
+const RecipeCard: React.FC<{ recipe: any; day: string }> = ({ recipe, day }) => (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
         <div className="bg-amber-500 p-4 text-white">
             <div className="flex justify-between items-center">
@@ -453,7 +453,7 @@ const RecipeCard = ({ recipe, day }) => (
     </div>
 );
 
-const WeeklyPlanGrid = ({ recipes }) => (
+const WeeklyPlanGrid = ({ recipes }: { recipes: any[] }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {recipes.map((recipe, index) => (
             <RecipeCard key={index} recipe={recipe} day={`Tag ${index + 1}`} />
@@ -545,7 +545,7 @@ const App = () => {
             setIsLoadingAi(true);
 
             try {
-                const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
                 // --- STEP 1: Single Day Preview (JSON) ---
                 const prompt = `
@@ -623,7 +623,7 @@ ${STUDY_TEXT}`;
             setDetailedRecipes(null);
 
             try {
-                const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
                 // --- PHASE 1: CONCEPT GENERATION ---
                 const conceptPrompt = `
@@ -957,7 +957,7 @@ JSON-Format (Array von Objekten):
             setAnalysis('');
 
             try {
-                const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
                 let contents;
                 let config = {};
 

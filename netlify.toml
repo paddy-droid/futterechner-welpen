@@ -5,6 +5,6 @@
 
 # Umgebungsvariablen für den Build
 [build.environment]
-  # Schließe VITE_GEMINI_API_KEY vom Secrets-Scanning aus
-  # da diese für das Frontend benötigt wird und sicher in Netlify gespeichert ist
-  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
+  # Schließe beide API-Schlüssel vom Secrets-Scanning aus
+  # da diese für das Frontend und Backend benötigt werden und sicher in Netlify gespeichert sind
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY,GEMINI_API_KEY"

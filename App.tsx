@@ -572,8 +572,12 @@ Die Ration MUSS exakt wie folgt aufgebaut sein (Gramm-Basis):
 - **10-20% Faser-/Gemüse-Quelle** (GEKOCHT/PÜRIERT)
 - **1-3% Fettquelle** (Öle)
 
+WICHTIG: ZWINGENDE SUPPLEMENTE (MÜSSEN IN DIE ZUTATENLISTE):
+1. **CALCIUM:** Füge IMMER "Eierschalenpulver" (oder Algenkalk) als Zutat hinzu. Menge: ca. 0,5 - 0,6g pro 100g Fleisch.
+2. **JOD:** Füge IMMER "Seealgenmehl" als Zutat hinzu.
+3. **Öl-Rotation:** Verwende NICHT nur Lachsöl. Wechsle ab mit Weizenkeimöl, Leinöl, Hanföl, etc.
+
 WICHTIG ZUR SUPPLEMENTIERUNG & ÖLEN:
-- **Öl-Rotation:** Verwende NICHT nur Lachsöl. Wechsle ab mit Weizenkeimöl, Leinöl, Hanföl, etc.
 - **Mengenangaben:** Gib bei der Supplementierung SCHÄTZWERTE in Gramm an (z.B. "ca. X g Eierschalenpulver", "ca. Y g Seealgenmehl").
 - **Superfoods:** Wähle ein passendes Superfood aus der Liste und erkläre im Feld "superfood_info" kurz, warum es so gesund ist (z.B. "Kürbis ist gut für die Verdauung...").
 
@@ -683,7 +687,10 @@ ${JSON.stringify(chunk)}
 
 STRIKTE VORGABEN (MATHEMATISCH):
 1.  **Ziel-Kalorien:** EXAKT ${calories.toFixed(0)} kcal pro Rezept.
-2.  **ÖL-AUSWAHL:** Nutze NUR hochwertige Öle: Lachsöl, Leinöl, Hanföl, Dorschlebertran. (Kein Weizenkeimöl, wenn nicht nötig).
+2.  **ZWINGENDE SUPPLEMENTE (MÜSSEN IN DIE ZUTATENLISTE):**
+    - **CALCIUM:** JEDES Rezept MUSS "Eierschalenpulver" (oder Algenkalk) enthalten. Menge: ca. 0,5 - 0,6g pro 100g Fleisch.
+    - **JOD:** JEDES Rezept MUSS "Seealgenmehl" enthalten.
+    - **ÖL:** Nutze hochwertige Öle (Lachsöl, Leinöl, Hanföl).
 3.  **MENGEN-VERHÄLTNIS (Das "Baukasten-System" - KORRIGIERT):**
     Die Gesamtfuttermenge muss sich zwingend an diese Verteilung halten (Gramm-Basis).
     **ACHTUNG: Der Fleischanteil war zuletzt zu hoch. Halte dich strikt an diese Obergrenzen:**

@@ -1284,7 +1284,7 @@ Gib die Antwort strikt als JSON zurück:
 `;
 
                 const response = await ai.models.generateContent({
-                    model: 'models/gemini-2.0-flash-exp',
+                    model: 'gemini-3-pro-preview',
                     contents: {
                         parts: [
                             { text: systemPrompt },

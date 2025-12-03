@@ -11,9 +11,9 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        // Ersetze VITE_GEMINI_API_KEY durch einen Platzhalter zur Build-Zeit
-        // und lade den echten Wert zur Laufzeit
-        'import.meta.env.VITE_GEMINI_API_KEY': 'process.env.VITE_GEMINI_API_KEY || ""'
+        // Ersetze VITE_GEMINI_API_KEY durch einen leeren String zur Build-Zeit
+        // Der echte Wert wird zur Laufzeit aus der Umgebungsvariable geladen
+        'import.meta.env.VITE_GEMINI_API_KEY': '""'
       },
       resolve: {
         alias: {

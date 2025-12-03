@@ -1,0 +1,10 @@
+# Netlify-Konfigurationsdatei
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Umgebungsvariablen für den Build
+[build.environment]
+  # Schließe VITE_GEMINI_API_KEY vom Secrets-Scanning aus
+  # da diese für das Frontend benötigt wird und sicher in Netlify gespeichert ist
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"

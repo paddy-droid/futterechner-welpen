@@ -10,8 +10,11 @@ export default defineConfig(({ mode }) => {
         host: '0.0.0.0',
       },
       plugins: [react()],
-      // Keine define-Konfiguration für VITE_GEMINI_API_KEY, damit sie zur Laufzeit aufgelöst wird
-      // und nicht im Build-Output erscheint
+      define: {
+        // Ersetze VITE_GEMINI_API_KEY durch einen Platzhalter zur Build-Zeit
+        // und lade den echten Wert zur Laufzeit
+        'import.meta.env.VITE_GEMINI_API_KEY': 'process.env.VITE_GEMINI_API_KEY || ""'
+      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),

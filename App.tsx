@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import VoiceAssistant from './src/components/VoiceAssistant';
 import PasswordProtection from './src/components/PasswordProtection';
 
 // --- KONSTANTEN & DATEN ---
@@ -1194,7 +1193,6 @@ ${basePrompt}
         const [poopImage, setPoopImage] = useState(null);
         const [imagePreview, setImagePreview] = useState(null);
         const [analysisResult, setAnalysisResult] = useState(null);
-        const [showVoiceAssistant, setShowVoiceAssistant] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
         const [loadingText, setLoadingText] = useState('Starte Analyse...');
         const [error, setError] = useState('');
@@ -1406,13 +1404,6 @@ Gib die Antwort strikt als JSON zurück:
                                 }`}>
                                 <div className="flex justify-between items-start mb-4">
                                     <h3 className="text-2xl font-bold text-gray-900">Analyse-Ergebnis</h3>
-                                    <button
-                                        onClick={() => setShowVoiceAssistant(true)}
-                                        className="flex items-center px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition font-semibold text-sm"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                                        Mit Dr. Vet sprechen
-                                    </button>
                                 </div>
 
                                 <p className="text-lg text-gray-800 leading-relaxed mb-6 font-medium">
@@ -1491,12 +1482,6 @@ Gib die Antwort strikt als JSON zurück:
                         </div>
                     )}
 
-                    {showVoiceAssistant && analysisResult && (
-                        <VoiceAssistant
-                            analysisResult={analysisResult}
-                            onClose={() => setShowVoiceAssistant(false)}
-                        />
-                    )}
                 </div>
             </>
         );

@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
+import VoiceAssistant from './src/components/VoiceAssistant';
+import PasswordProtection from './src/components/PasswordProtection';
 
 // --- KONSTANTEN & DATEN ---
 
@@ -1192,6 +1194,7 @@ ${basePrompt}
         const [poopImage, setPoopImage] = useState(null);
         const [imagePreview, setImagePreview] = useState(null);
         const [analysisResult, setAnalysisResult] = useState(null);
+        const [showVoiceAssistant, setShowVoiceAssistant] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
         const [loadingText, setLoadingText] = useState('Starte Analyse...');
         const [error, setError] = useState('');
@@ -1294,7 +1297,8 @@ Gib die Antwort strikt als JSON zurück:
                     config: { responseMimeType: "application/json" }
                 });
 
-                const result = JSON.parse(response.text);
+                const cleanText = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
+                const result = JSON.parse(cleanText);
                 setAnalysisResult(result);
 
             } catch (e) {
@@ -1387,8 +1391,8 @@ Gib die Antwort strikt als JSON zurück:
                                             className="h-48 w-48 object-cover rounded-xl shadow-lg border-4 border-white"
                                         />
                                         <div className={`absolute -bottom-3 -right-3 px-4 py-1 rounded-full text-sm font-bold shadow-md ${analysisResult.status_color === 'red' ? 'bg-red-500 text-white' :
-                                                analysisResult.status_color === 'yellow' ? 'bg-yellow-500 text-white' :
-                                                    'bg-green-500 text-white'
+                                            analysisResult.status_color === 'yellow' ? 'bg-yellow-500 text-white' :
+                                                'bg-green-500 text-white'
                                             }`}>
                                             Bristol {analysisResult.bristol_score}
                                         </div>
@@ -1397,11 +1401,18 @@ Gib die Antwort strikt als JSON zurück:
                             )}
 
                             <div className={`p-6 rounded-xl border-l-8 shadow-lg ${analysisResult.status_color === 'red' ? 'bg-red-50 border-red-500' :
-                                    analysisResult.status_color === 'yellow' ? 'bg-yellow-50 border-yellow-500' :
-                                        'bg-green-50 border-green-500'
+                                analysisResult.status_color === 'yellow' ? 'bg-yellow-50 border-yellow-500' :
+                                    'bg-green-50 border-green-500'
                                 }`}>
                                 <div className="flex justify-between items-start mb-4">
                                     <h3 className="text-2xl font-bold text-gray-900">Analyse-Ergebnis</h3>
+                                    <button
+                                        onClick={() => setShowVoiceAssistant(true)}
+                                        className="flex items-center px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition font-semibold text-sm"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                                        Mit Dr. Vet sprechen
+                                    </button>
                                 </div>
 
                                 <p className="text-lg text-gray-800 leading-relaxed mb-6 font-medium">
@@ -1479,30 +1490,39 @@ Gib die Antwort strikt als JSON zurück:
                             </div>
                         </div>
                     )}
+
+                    {showVoiceAssistant && analysisResult && (
+                        <VoiceAssistant
+                            analysisResult={analysisResult}
+                            onClose={() => setShowVoiceAssistant(false)}
+                        />
+                    )}
                 </div>
             </>
         );
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
-            <div className="relative z-10">
-                <header className="text-center py-16 px-4">
-                    <img src="https://www.willenskraft.co.at/wp-content/uploads/2018/06/Final.-Logo-Hundeschule-Willenskraft.-Gute-Hundeschule-Graz-Gleisdorf.png" alt="Willenskraft Logo" className="mx-auto h-24 w-auto mb-8" />
-                    <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight">
-                        <span className="text-amber-500">Willenskraft</span> Futter-Rechner
-                    </h1>
-                    <p className="max-w-2xl mx-auto mt-4 text-lg text-gray-600">Ganzheitliche & bedarfsgerechte Rationen für Dein gesundes Hundeleben.</p>
-                </header>
+        <PasswordProtection>
+            <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
+                <div className="relative z-10">
+                    <header className="text-center py-16 px-4">
+                        <img src="https://www.willenskraft.co.at/wp-content/uploads/2018/06/Final.-Logo-Hundeschule-Willenskraft.-Gute-Hundeschule-Graz-Gleisdorf.png" alt="Willenskraft Logo" className="mx-auto h-24 w-auto mb-8" />
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight">
+                            <span className="text-amber-500">Willenskraft</span> Futter-Rechner
+                        </h1>
+                        <p className="max-w-2xl mx-auto mt-4 text-lg text-gray-600">Ganzheitliche & bedarfsgerechte Rationen für Dein gesundes Hundeleben.</p>
+                    </header>
 
-                <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-                    {view === 'selection' && <SelectionView />}
-                    {view === 'calculator' && <CalculatorView />}
-                    {view === 'analyzer' && <AnalyzerView />}
-                    {view === 'kackiAnalyzer' && <KackiAnalyzerView />}
-                </main>
+                    <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+                        {view === 'selection' && <SelectionView />}
+                        {view === 'calculator' && <CalculatorView />}
+                        {view === 'analyzer' && <AnalyzerView />}
+                        {view === 'kackiAnalyzer' && <KackiAnalyzerView />}
+                    </main>
+                </div>
             </div>
-        </div>
+        </PasswordProtection>
     );
 }
 
